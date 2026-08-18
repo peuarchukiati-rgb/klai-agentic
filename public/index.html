@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KLAI Agentic — the gate</title>
+<style>
+  :root{--bg:#12100e;--panel:#1b1815;--ink:#efe9df;--mut:#a79e8e;--line:#302a24;--copper:#c8794a;--green:#7fae6b;--rust:#c86a5a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 20px 80px}
+  h1{font-size:20px;letter-spacing:.02em;margin:0 0 4px}
+  .trust{color:var(--mut);font-size:12.5px;letter-spacing:.04em;margin:0 0 22px;text-transform:uppercase}
+  textarea{width:100%;height:120px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.5 ui-monospace,monospace;resize:vertical}
+  button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px}
+  button:hover{border-color:var(--copper)}
+  .primary{background:var(--copper);border-color:var(--copper);color:#1a130d;font-weight:600}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:18px}
+  .sec{color:var(--copper);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  td,th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+  .card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:10px}
+  .card h3{margin:0 0 4px;font-size:14.5px}
+  .card p{margin:0 0 8px;color:var(--mut);font-size:13px}
+  .conf{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;border:1px solid var(--line);border-radius:20px;padding:2px 9px;color:var(--mut)}
+  .b-approve{border-color:var(--green);color:var(--green)}
+  .b-reject{border-color:var(--rust);color:var(--rust)}
+  .status{font-size:12px;color:var(--mut);margin-left:6px}
+  .done{color:var(--green)} .rej{color:var(--rust)}
+  pre{white-space:pre-wrap;background:#100e0c;border:1px solid var(--line);border-radius:8px;padding:10px;font-size:12px;color:var(--ink);margin-top:8px}
+  .mut{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>KLAI Agentic</h1>
+  <p class="trust">AI prepares · System records · Human approves · Agent executes only approved actions</p>
+
+  <textarea id="dump" placeholder="Paste a messy ops / coordination dump…"></textarea>
+  <div class="row">
+    <button class="primary" id="ingest">Sweep &amp; Propose</button>
+    <span class="status" id="istat"></span>
+  </div>
+
+  <div id="board" class="panel" style="display:none">
+    <p class="sec">Operating view</p>
+    <p id="state" style="margin:0 0 12px"></p>
+    <div id="items"></div>
+    <div id="bd"></div>
+  </div>
+
+  <div id="cards"></div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+async function api(p,body,method='POST'){const r=await fetch(p,{method,headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});return r.json();}
+const THREAD='demo';
+
+$('#ingest').onclick=async()=>{
+  const text=$('#dump').value.trim(); if(!text)return;
+  $('#istat').textContent='sweeping…'; $('#cards').innerHTML='';
+  const r=await api('/ingest',{text,thread:THREAD});
+  $('#istat').textContent='done · run '+(r.run_id||'');
+  renderBoard(r.board); renderCards(r.cards||[]);
+};
+
+function renderBoard(b){
+  if(!b){return}
+  $('#board').style.display='block';
+  $('#state').textContent=b.campaign_state||'';
+  const items=(b.items||[]);
+  $('#items').innerHTML = items.length? (
+    '<table><tr><th>Item</th><th>Stage</th><th>Blocked on</th><th>Note</th></tr>'+
+    items.map(i=>`<tr><td>${esc(i.token)}</td><td>${esc(i.stage)}</td><td>${esc(i.blocked_on||'—')}</td><td class="mut">${esc(i.note||'')}</td></tr>`).join('')+'</table>'
+  ):'';
+  const bd=[];
+  if((b.blocked||[]).length)bd.push('<p class="sec" style="margin-top:14px">Blocked / waiting</p>'+b.blocked.map(x=>`<div class="mut">• ${esc(x)}</div>`).join(''));
+  if((b.deadlines||[]).length)bd.push('<p class="sec" style="margin-top:14px">Deadlines</p>'+b.deadlines.map(x=>`<div class="mut">• ${esc(x)}</div>`).join(''));
+  $('#bd').innerHTML=bd.join('');
+}
+
+function renderCards(cards){
+  $('#cards').innerHTML='<p class="sec" style="margin-top:20px">Action cards — your call</p>'+
+    cards.map(c=>cardHtml(c)).join('');
+}
+function cardHtml(c){
+  return `<div class="card" id="c-${c.case_id}">
+    <div class="row" style="justify-content:space-between;margin:0">
+      <h3>${esc(c.title)}</h3><span class="conf">${esc(c.confidence||'med')}</span>
+    </div>
+    <p>${esc(c.detail||'')}</p>
+    <div class="row" style="margin:0">
+      <button class="b-approve" onclick="decide('${c.case_id}','approve')">Approve</button>
+      <button class="b-reject" onclick="decide('${c.case_id}','reject')">Reject</button>
+      <span class="status" id="s-${c.case_id}"></span>
+    </div>
+    <div id="a-${c.case_id}"></div>
+  </div>`;
+}
+async function decide(id,decision){
+  let reason=null;
+  if(decision==='reject'){reason=prompt('Why reject? (becomes decision memory)')||'rejected';}
+  await api('/gate',{case_id:id,decision,reason,thread:THREAD});
+  const s=$('#s-'+id);
+  if(decision==='reject'){s.innerHTML='<span class="rej">rejected · remembered</span>';return}
+  s.innerHTML='<span class="done">approved</span>';
+  s.insertAdjacentHTML('afterend',` <button onclick="run('${id}')">Execute</button>`);
+}
+async function run(id){
+  $('#s-'+id).innerHTML='<span class="done">executing…</span>';
+  const r=await api('/execute',{case_id:id});
+  $('#s-'+id).innerHTML='<span class="done">executed ✓</span>';
+  if(r.artifact)$('#a-'+id).innerHTML='<pre>'+esc(r.artifact)+'</pre>';
+}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+</script>
+</body>
+</html>
