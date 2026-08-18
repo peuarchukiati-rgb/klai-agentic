@@ -92,10 +92,9 @@ function cardHtml(c){
       <h3>${esc(c.title)}</h3><span class="conf">${esc(c.confidence||'med')}</span>
     </div>
     <p>${esc(c.detail||'')}</p>
-    <div class="row" style="margin:0">
+    <div class="row" style="margin:0" id="btns-${c.case_id}">
       <button class="b-approve" onclick="decide('${c.case_id}','approve')">Approve</button>
       <button class="b-reject" onclick="decide('${c.case_id}','reject')">Reject</button>
-      <span class="status" id="s-${c.case_id}"></span>
     </div>
     <div id="a-${c.case_id}"></div>
   </div>`;
@@ -103,16 +102,17 @@ function cardHtml(c){
 async function decide(id,decision){
   let reason=null;
   if(decision==='reject'){reason=prompt('Why reject? (becomes decision memory)')||'rejected';}
+  const btns=$('#btns-'+id);
+  btns.innerHTML='<span class="status">…</span>';
   await api('/gate',{case_id:id,decision,reason,thread:THREAD});
-  const s=$('#s-'+id);
-  if(decision==='reject'){s.innerHTML='<span class="rej">rejected · remembered</span>';return}
-  s.innerHTML='<span class="done">approved</span>';
-  s.insertAdjacentHTML('afterend',` <button onclick="run('${id}')">Execute</button>`);
+  if(decision==='reject'){btns.innerHTML='<span class="status"><span class="rej">rejected · remembered</span></span>';return}
+  btns.innerHTML='<span class="status"><span class="done">approved</span></span> <button class="primary" onclick="run(\''+id+'\')">Execute</button>';
 }
 async function run(id){
-  $('#s-'+id).innerHTML='<span class="done">executing…</span>';
+  const btns=$('#btns-'+id);
+  btns.innerHTML='<span class="status"><span class="done">executing…</span></span>';
   const r=await api('/execute',{case_id:id});
-  $('#s-'+id).innerHTML='<span class="done">executed ✓</span>';
+  btns.innerHTML='<span class="status"><span class="done">executed ✓</span></span>';
   if(r.artifact)$('#a-'+id).innerHTML='<pre>'+esc(r.artifact)+'</pre>';
 }
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}

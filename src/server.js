@@ -89,7 +89,7 @@ app.post('/execute', async (req, res) => {
     // bounded: turn the approved action into a concrete brief artifact (no side effects beyond STORE).
     const { text: artifact } = await ai.generate({
       model: MODEL_REF,
-      prompt: `Turn this approved action into a tight, ready-to-send task brief (who/what/when, 3-5 lines). Action: ${snap.get('title')}\nContext: ${snap.get('detail')}`,
+      prompt: `Turn this approved action into a tight, ready-to-send task brief (who / what / when, 3-5 lines). For "when", use the specific date/time stated in the action or context if present (e.g. "10:00 tomorrow", "Aug 6"); if none is stated, write "no date stated" — never a placeholder like [Insert Date]. Action: ${snap.get('title')}\nContext: ${snap.get('detail')}`,
       config: { temperature: 0.3, maxOutputTokens: 800 },
     });
     await db.collection(CASES).doc(case_id).set({ execution_status: 'done', stage: 'execute', execution_artifact: artifact }, { merge: true });
