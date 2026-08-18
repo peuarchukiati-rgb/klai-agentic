@@ -1,0 +1,20 @@
+{
+  "name": "klai-agentic",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "KLAI Agentic — governed AI partner: ingest → sweep → propose → human gate → bounded execute. Hackathon entry (Gemini 3.5 / GenKit / Cloud Run / Firestore / Cloud Storage).",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@genkit-ai/google-genai": "^1.41.0",
+    "@google-cloud/firestore": "^7.10.0",
+    "express": "^4.19.2",
+    "genkit": "^1.0.0"
+  }
+}
