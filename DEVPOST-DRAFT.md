@@ -27,7 +27,7 @@ Turns unstructured input into structured state, proposes what should happen next
 See `ARCHITECTURE.md`. Invariants: gate is structural (execute refuses un-approved cases) · decision memory (rejections/edits feed future proposals) · auditable state · idempotent by case id.
 
 ## What I learned / demo proof
-[fill after demo dataset locked] — show one prior rejection visibly changing the next proposal (decision-memory), end-to-end on Cloud Run + Vertex + Firestore.
+Demo runs on two unrelated messy inputs — a 30+ creator KOL campaign coordination chat and a meeting transcript — through the *same* loop, proving it isn't tuned to one format. The gate is shown live: a rejected card writes its reason to decision memory, and the next proposal on that thread visibly honors it (not re-proposed). An approved card executes into a bounded who/what/when artifact; a rejected one never executes. Every state — approval_status, approved_by, approved_at, execution_status, user_feedback — is written to Firestore, so the whole decision trail is auditable after the fact. Lesson: the hard part of an agentic system isn't the model's intelligence, it's building the structure that makes it stop and let a human decide.
 
 ## Links
 - Repo: https://github.com/peuarchukiati-rgb/klai-agentic
