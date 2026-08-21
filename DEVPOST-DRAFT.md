@@ -30,6 +30,6 @@ See `ARCHITECTURE.md`. Invariants: gate is structural (execute refuses un-approv
 [fill after demo dataset locked] — show one prior rejection visibly changing the next proposal (decision-memory), end-to-end on Cloud Run + Vertex + Firestore.
 
 ## Links
-- Repo: [this repo, public]
+- Repo: https://github.com/peuarchukiati-rgb/klai-agentic
 - Live: https://klai-agentic-760656259079.us-central1.run.app
 - Video: [~4 min, TBD]
