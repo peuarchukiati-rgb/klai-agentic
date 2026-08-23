@@ -27,9 +27,11 @@ Turns unstructured input into structured state, proposes what should happen next
 See `ARCHITECTURE.md`. Invariants: gate is structural (execute refuses un-approved cases) · decision memory (rejections/edits feed future proposals) · auditable state · idempotent by case id.
 
 ## What I learned / demo proof
-Demo runs on two unrelated messy inputs — a 30+ creator KOL campaign coordination chat and a meeting transcript — through the *same* loop, proving it isn't tuned to one format. The gate is shown live: a rejected card writes its reason to decision memory, and the next proposal on that thread visibly honors it (not re-proposed). An approved card executes into a bounded who/what/when artifact; a rejected one never executes. Every state — approval_status, approved_by, approved_at, execution_status, user_feedback — is written to Firestore, so the whole decision trail is auditable after the fact. Lesson: the hard part of an agentic system isn't the model's intelligence, it's building the structure that makes it stop and let a human decide.
+The video **follows one decision** end to end. A messy campaign thread contains one undecided question — *lock a 20-product scope for a client?* The agent sweeps it into structured state, then proposes the decision. At the gate, everything stops: I reject it, with a reason — the client hasn't signed off. On the next pass, **same input**, the agent no longer proposes approving the scope: it marks it **blocked**, and proposes getting the client's sign-off instead. The rejection wasn't just logged — it **changed what the agent proposed next**. That is the difference between a tool and a partner, and it's captured live (ingest → propose → reject-with-reason → re-ingest same input), not staged. Every state — approval_status, approved_by, approved_at, execution_status, user_feedback — is written to Firestore, so the decision trail stays auditable. Lesson: the hard part of an agentic system isn't the model's intelligence, it's the structure that makes it stop and let a human decide.
+
+> Intelligence is everywhere. Discipline isn't. The leverage was never the model — it's the discipline around it.
 
 ## Links
 - Repo: https://github.com/peuarchukiati-rgb/klai-agentic
 - Live: https://klai-agentic-760656259079.us-central1.run.app
-- Video: [~4 min, TBD]
+- Video: draft cut ready (~1:08, "Follow One Decision"); final voice pass + upload pending

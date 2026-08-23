@@ -27,22 +27,26 @@ A governed AI partner for messy operational workflows. One loop:
 - Full loop live: https://klai-agentic-760656259079.us-central1.run.app (rev 00004)
 - Repo PUBLIC: https://github.com/peuarchukiati-rgb/klai-agentic
 - Gate UI (public/index.html), validated by Peak on 2 real inputs
-- Video docs: NARRATION-MAP.md (4-min structure) + VO-SCRIPT.md (teleprompter)
-- DEVPOST-DRAFT.md 90% (repo link + demo-proof filled)
+- DEVPOST-DRAFT.md aligned to final narrative (Follow One Decision + decision-memory proof)
+
+## Video (2026-08-23) — code-gen pipeline in ~/klai-video (separate from this repo)
+Narrative converged over many iterations to **"FOLLOW ONE DECISION"**: track one decision (lock a 20-product scope for Brand-1) through raw → state → proposal → gate → reject-with-reason → next-pass-changes. Proof captured LIVE from the deployed app (ingest → reject → re-ingest same input → the approve-scope proposal is gone, replaced by BLOCKED + "present for sign-off"). Current cut = **v8** (~1:08): eclipse-atmosphere stage (corona + starfield + grain), still frames (no ken-burns), persistent loop stepper (RAW→STATE→PROPOSAL→GATE(+human)→EXECUTE ↻ loops), English edge-tts draft voice. Voice = Peak's "KLAI Field Notes" register ("Intelligence is everywhere. Discipline isn't."). Two external reviewers (Clawbie + ChatGPT) verdict = GO.
+Build: `~/klai-video/build6.py` → `~/klai-video/out/klai-agentic-v8.mp4`. Narrative: `~/klai-video/NARRATIVE-v6.md`. Clean tokenized input: `~/klai-video/demo-scope.txt`. Data all tokenized (Brand-1/KOL-A/CREATOR-n) — real client source stays scrubbed.
 
 ## What's next
-1. **Record ~4-min video** (Peak): screen-record the scrubbed KOL run one-take → read VO-SCRIPT over it → capture 3 wow-beats (board / reject·remembered / execute-artifact).
-2. **Submit Devpost** (Peak): paste DEVPOST-DRAFT.md, attach video link, repo, live URL.
+1. **Finalize video** (Peak's call): upgrade voice (ElevenLabs or Peak read) + optionally lengthen/polish; then export final.
+2. **Submit Devpost** (Peak): paste DEVPOST-DRAFT.md, attach video, repo, live URL.
+3. Optional: commit the video pipeline source into the repo (text only; gitignore mp4/audio/shots) once the cut is final.
 
 ## Files the next session must read
-`NARRATION-MAP.md` · `VO-SCRIPT.md` · `DEVPOST-DRAFT.md` · `src/server.js` · `src/pipeline.js` · `README.md`
+`~/klai-video/NARRATIVE-v6.md` · `~/klai-video/build6.py` · `DEVPOST-DRAFT.md` · `src/server.js` · `src/pipeline.js` · `README.md`
 
 ---
 HANDOFF CONTEXT — do not delete; the next session reads this block first
 project: klai-agentic (hackathon)
-updated: 2026-08-21 15:05 · M3 / L2 session
-state: build DONE + repo PUBLIC + video docs ready; loop live on Cloud Run, validated on 2 inputs
-next: Peak records ~4-min video (screen-record scrubbed run + read VO-SCRIPT), then submit Devpost
-blocked_on: Peak's hands only (screen recording + Devpost form) — no code work left
-key_files: NARRATION-MAP.md, VO-SCRIPT.md, DEVPOST-DRAFT.md, src/server.js, src/pipeline.js
+updated: 2026-08-23 11:35 · M3 / L2 session
+state: build+repo done & live; video draft v8 "Follow One Decision" (eclipse stage + loop stepper), reviewers say GO — PAUSED as checkpoint with time to spare
+next: finalize video voice/polish → submit Devpost (both Peak's hands); code side is done
+blocked_on: Peak — voice choice + Devpost form; no code work pending
+key_files: ~/klai-video/NARRATIVE-v6.md, ~/klai-video/build6.py, DEVPOST-DRAFT.md, src/server.js, src/pipeline.js
 ---
