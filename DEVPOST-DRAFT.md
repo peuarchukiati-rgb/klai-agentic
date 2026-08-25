@@ -16,6 +16,8 @@ While building my own always-on agent, it did the work *and closed the decision 
 ## What it does
 Turns unstructured input into structured state, proposes what should happen next, captures human approvals and edits as decision memory, and executes only approved actions. The collaboration is not just conversational; it is operational — it uses prior feedback to shape future proposals.
 
+**It's general-purpose, not niche.** KLAI Agentic is a governed-agent *layer* for any messy operational workflow. The demo video uses one concrete example — a marketing-campaign coordination thread — but the deployed app accepts any unstructured input (a meeting, an inbox, a project channel, a launch). Judges can open the live URL and paste their own mess; no API key or setup required — it runs on our Cloud Run backend and service account.
+
 ## How it's built
 - **Gemini 3.5 Flash** via **Vertex AI** (global endpoint)
 - **GenKit** flows: ingest → sweep → propose → gate → execute

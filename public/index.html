@@ -10,7 +10,9 @@
   body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
   .wrap{max-width:900px;margin:0 auto;padding:28px 20px 80px}
   h1{font-size:20px;letter-spacing:.02em;margin:0 0 4px}
-  .trust{color:var(--mut);font-size:12.5px;letter-spacing:.04em;margin:0 0 22px;text-transform:uppercase}
+  .trust{color:var(--mut);font-size:12.5px;letter-spacing:.04em;margin:0 0 10px;text-transform:uppercase}
+  .hint{color:var(--mut);font-size:13.5px;line-height:1.5;margin:0 0 20px;max-width:680px}
+  .hint em{color:var(--copper);font-style:normal}
   textarea{width:100%;height:120px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px;font:13px/1.5 ui-monospace,monospace;resize:vertical}
   button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:13px}
   button:hover{border-color:var(--copper)}
@@ -37,8 +39,9 @@
 <div class="wrap">
   <h1>KLAI Agentic</h1>
   <p class="trust">AI prepares · System records · Human approves · Agent executes only approved actions</p>
+  <p class="hint">One general loop for messy operational work — not tied to any one industry. The demo video uses a campaign thread as an example; here, paste <em>your own</em> mess: a meeting, an inbox, a project channel, a launch.</p>
 
-  <textarea id="dump" placeholder="Paste a messy ops / coordination dump…"></textarea>
+  <textarea id="dump" placeholder="Paste any messy thread — chat log, meeting notes, an inbox dump… (this isn't tied to one workflow)"></textarea>
   <div class="row">
     <button class="primary" id="ingest">Sweep &amp; Propose</button>
     <span class="status" id="istat"></span>
