@@ -44,9 +44,9 @@ Build: `~/klai-video/build6.py` → `~/klai-video/out/klai-agentic-v8.mp4`. Narr
 ---
 HANDOFF CONTEXT — do not delete; the next session reads this block first
 project: klai-agentic (hackathon)
-updated: 2026-08-23 11:35 · M3 / L2 session
-state: build+repo done & live; video draft v8 "Follow One Decision" (eclipse stage + loop stepper), reviewers say GO — PAUSED as checkpoint with time to spare
-next: finalize video voice/polish → submit Devpost (both Peak's hands); code side is done
-blocked_on: Peak — voice choice + Devpost form; no code work pending
-key_files: ~/klai-video/NARRATIVE-v6.md, ~/klai-video/build6.py, DEVPOST-DRAFT.md, src/server.js, src/pipeline.js
+updated: 2026-08-25 23:10 · M3 / L2 session
+state: SUBMITTED — https://devpost.com/software/klai-agentic (Collaborative Partner). App live rev 00005, repo public, video https://youtu.be/-BgYhlxHAxI (v10.1 living-scene), detailed architecture diagram in. Editable until Aug 31.
+next: OPTIONAL only — bonus points (social #AllThingsAgenticHackathon, a Field Notes post, a 2nd Google model), or upgrade video voice to ElevenLabs. Nothing required.
+blocked_on: -
+key_files: SUBMISSION-PACKET.md, DEVPOST-ABOUT.md, architecture-detailed.png, ~/klai-video/build_full.py, src/server.js, src/pipeline.js
 ---
