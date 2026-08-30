@@ -39,11 +39,14 @@
 <div class="wrap">
   <h1>KLAI Agentic</h1>
   <p class="trust">AI prepares · System records · Human approves · Agent executes only approved actions</p>
-  <p class="hint">One general loop for messy operational work — not tied to any one industry. The demo video uses a campaign thread as an example; here, paste <em>your own</em> mess: a meeting, an inbox, a project channel, a launch.</p>
+  <p class="hint">One general loop for messy operational work — not tied to any one industry. The demo video uses a campaign thread as an example; here, paste <em>or upload</em> your own mess: a meeting, an inbox, a project channel, a launch.</p>
 
-  <textarea id="dump" placeholder="Paste any messy thread — chat log, meeting notes, an inbox dump… (this isn't tied to one workflow)"></textarea>
+  <textarea id="dump" placeholder="Paste any messy thread — chat log, meeting notes, an inbox dump… — or drop a .txt/.md file here (this isn't tied to one workflow)"></textarea>
   <div class="row">
     <button class="primary" id="ingest">Sweep &amp; Propose</button>
+    <button id="upload">Upload file</button>
+    <input type="file" id="file" accept=".txt,.md,.markdown,.csv,.log,text/plain,text/markdown" hidden>
+    <span class="status" id="fname"></span>
     <span class="status" id="istat"></span>
   </div>
 
@@ -61,6 +64,23 @@
 const $=s=>document.querySelector(s);
 async function api(p,body,method='POST'){const r=await fetch(p,{method,headers:{'content-type':'application/json'},body:body?JSON.stringify(body):undefined});return r.json();}
 const THREAD='demo';
+
+// Upload / drag-drop: read a text file into the textarea (paste OR upload — your choice).
+const fileEl=$('#file'), dz=$('#dump');
+function loadFile(f){
+  if(!f)return;
+  const rd=new FileReader();
+  rd.onload=()=>{const res=rd.result||'';
+    if(/^(%PDF-|PK)/.test(res.slice(0,5))){$('#fname').textContent='unsupported file (use .txt/.md)';return;}
+    dz.value=res; $('#fname').textContent=f.name+' loaded';};
+  rd.onerror=()=>{$('#fname').textContent='read error';};
+  rd.readAsText(f);
+}
+$('#upload').onclick=()=>fileEl.click();
+fileEl.onchange=()=>loadFile(fileEl.files[0]);
+['dragover','dragenter'].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.style.borderColor='var(--copper)';}));
+['dragleave','drop'].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.style.borderColor='';}));
+dz.addEventListener('drop',ev=>{const f=ev.dataTransfer&&ev.dataTransfer.files[0]; if(f)loadFile(f);});
 
 $('#ingest').onclick=async()=>{
   const text=$('#dump').value.trim(); if(!text)return;
